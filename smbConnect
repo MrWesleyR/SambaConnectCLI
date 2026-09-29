@@ -1,34 +1,57 @@
-#!/bin/env bash
+#!/usr/bin/env bash 
+######################################################### 
+## ## Mount Netword Folder
+##
+## Name: MrWesleyR
+## Date: 2024/04/12
+##
+#########################################################
 
-args=("$@")
+server="//192.168.1.${3}"
+path_credentials="/home/ashirak/.smb/"
+folder=("$1")
+credentials=("$2")
+[[ -z "$4" ]] && group="1000" || group=("$4")
 
-#Return case not insert args
-[ -z "${args}" ]&& {
-	echo "Insert folder has mounted"
-	exit 0
-}
-
-dir="/mnt/${args}"
+dir="/mnt/${folder}"
 
 #Create path has monted 
-[ ! -d ${dir} ]&&{  
+if [[ ! -d ${dir} ]]; then
 	mkdir ${dir}
 	chmod -R 700 ${dir}
 	chown -R ashirak:root ${dir}	
-	echo "Path created."
-}
+	echo "Path `${dir}` created."
+fi
 
-findmnt=$(findmnt | grep "/mnt/${args}")
-[ -z "${findmnt}" ] &&{
-	
-	{  
-		mount -t cifs //[your-ip or ddns]/${args[@]} /mnt/${args[@]} -o credentials=[your_credentials_file],dir_mode=0755,file_mode=0755 
-	} || {
-		set -e 
-		exit 0;
-	}
-	echo "${args} monted";
-	exit 0
-}
+# Return case if no arguments are provided
+if [[ -z "${folder}" || -z "${credentials}" || -z "${$3}" ]]; then
+    	echo "Please enter all parameters."
+	echo -e "Exemple use:\n"
+	echo -e "$ sudo nfm SMB_PATH smbCredentials host \n"
+	echo "SMB_PATH = Name folder in your server samba"
+	echo "smbCredentials = Your file credential for samba server contains in $HOME/.smb"
+	echo "Samba server IP address, e.g. 192.168.1.100. Enter only the last octet (100)"
+	echo "group = Your group registrated in server samba"
+    exit 1
+fi
 
-echo "${args} has monted"
+# Return case if no credentials are provided
+if [ -z "${credentials}" ]; then
+    echo "Please insert a credential to mount."
+    exit 1
+fi
+
+# Check if the directory is already mounted
+findmnt=$(findmnt | grep "/mnt/${folder}")
+if [[ -z "${findmnt}" ]]; then 
+    sudo mount -t cifs ${server}/${folder} "${dir}" -o credentials="${path_credentials}${credentials}",dir_mode=0775,file_mode=0775,uid=1000,gid=${group},forcegid,forceuid,vers=3.1.1,cache=none,serverino,noperm,actimeo=3
+    if [ $? -eq 0 ]; then
+        echo "${folder} has been mounted."
+    else
+        echo "Failed to mount ${folder}."
+        exit 1
+    fi
+else
+    echo "${folder} is already mounted."
+fi
+
