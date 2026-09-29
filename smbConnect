@@ -25,7 +25,7 @@ fi
 
 # Return case if no arguments are provided
 if [[ -z "${folder}" || -z "${credentials}" || -z "${$3}" ]]; then
-    	echo "Please enter all parameters."
+    echo "Please enter all parameters."
 	echo -e "Exemple use:\n"
 	echo -e "$ sudo nfm SMB_PATH smbCredentials host \n"
 	echo "SMB_PATH = Name folder in your server samba"
