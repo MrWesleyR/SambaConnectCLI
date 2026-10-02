@@ -145,7 +145,7 @@ domain=SEU_DOMINIO
 Exemplo completo:
 
 ```ini
-username=ashirak
+username=user
 password=minha_senha
 domain=WORKGROUP
 ```
