@@ -26,12 +26,12 @@ fi
 # Return case if no arguments are provided
 if [[ -z "${folder}" || -z "${credentials}" || -z "${3}" ]]; then
     echo "Please enter all parameters."
-	echo -e "Exemple use:\n"
-	echo -e "$ sudo nfm SMB_PATH smbCredentials host \n"
-	echo "SMB_PATH = Name folder in your server samba"
-	echo "smbCredentials = Your file credential for samba server contains in $HOME/.smb"
-	echo "Samba server IP address, e.g. 192.168.1.100. Enter only the last octet (100)"
-	echo "group = Your group registrated in server samba"
+    echo -e "Example use:\n"
+    echo -e "$ sudo nfm SMB_PATH smbCredentials host \n"
+    echo "SMB_PATH = Name folder in your server samba"
+    echo "smbCredentials = Your file credential for samba server contains in $HOME/.smb"
+    echo "Samba server IP address, e.g. 192.168.1.100. Enter only the last octet (100)"
+    echo "group = Your group registrated in server samba"
     exit 1
 fi
 
